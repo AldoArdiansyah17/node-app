@@ -3,7 +3,7 @@ agent any
 stages {
 stage('Clone Repository') {
 steps {
-git 'https://github.com/cravengithub/node-app.git'
+git branch: 'main', url: 'https://github.com/cravengithub/node-app.git'
 }
 }
 stage('Build') {
