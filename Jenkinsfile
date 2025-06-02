@@ -1,11 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Clone Repository') {
-            steps {
-                git branch: 'main', url: 'https://github.com/cravengithub/node-app.git'
-            }
-        }
         stage('Build') {
             steps {
                 sh 'npm install'
@@ -13,7 +8,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'npm test'
+                sh 'node app.js & sleep 3 && npm test'
             }
             post {
                 success {
