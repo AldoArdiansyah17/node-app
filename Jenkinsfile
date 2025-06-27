@@ -4,21 +4,13 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                script {
-                    docker.image('node:18').inside {
-                        sh 'npm install'
-                    }
-                }
+                sh 'npm install'
             }
         }
 
         stage('Test') {
             steps {
-                script {
-                    docker.image('node:18').inside {
-                        sh 'npm test'
-                    }
-                }
+                sh 'npm test'
             }
             post {
                 success {
@@ -32,12 +24,8 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                script {
-                    docker.image('node:18').inside {
-                        sh 'echo "Menjalankan aplikasi..."'
-                        sh 'node app.js &'
-                    }
-                }
+                sh 'echo "Menjalankan aplikasi..."'
+                sh 'node app.js &'
             }
         }
     }
