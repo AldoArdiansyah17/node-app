@@ -1,37 +1,44 @@
-pipeline { 
-    agent any 
-    stages { 
-        stage('Clone Repository') { 
-            steps { 
-                git 'https://github.com/AldoArdiansyah17/node-app.git ' 
-            } 
-        } 
- 
-        stage('Build') { 
-            steps { 
-                sh 'npm install' 
-            } 
-        } 
- 
-        stage('Test') { 
-            steps { 
-                sh 'npm test' // asumsi telah dibuat unit test 
-            } 
-            post { 
-                success { 
-                    echo 'Tes berhasil!' 
-                } 
-                failure { 
-                    echo 'Tes gagal!' 
-                } 
-            } 
-        } 
- 
-        stage('Deploy') { 
-            steps { 
-                sh 'echo "Menjalankan aplikasi..."' 
-                sh 'node app.js &' 
-            } 
-        } 
-    } 
-} 
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    docker.image('node:18').inside {
+                        sh 'npm install'
+                    }
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    docker.image('node:18').inside {
+                        sh 'npm test'
+                    }
+                }
+            }
+            post {
+                success {
+                    echo 'Tes berhasil!'
+                }
+                failure {
+                    echo 'Tes gagal!'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    docker.image('node:18').inside {
+                        sh 'echo "Menjalankan aplikasi..."'
+                        sh 'node app.js &'
+                    }
+                }
+            }
+        }
+    }
+}
