@@ -9,24 +9,22 @@ pipeline {
         }
 
         stage('Test') {
-            steps {
-                sh 'npm test'
-            }
-            post {
-                success {
-                    echo 'Tes berhasil!'
-                }
-                failure {
-                    echo 'Tes gagal!'
-                }
-            }
+    steps {
+        script {
+            // Jalankan server di background
+            sh 'node app.js &'
+            // Tunggu sebentar agar server siap
+            sh 'sleep 3'
+            // Jalankan test
+            sh 'npm test'
         }
-
-        stage('Deploy') {
-            steps {
-                sh 'echo "Menjalankan aplikasi..."'
-                sh 'node app.js &'
-            }
+    }
+    post {
+        success {
+            echo 'Tes berhasil!'
+        }
+        failure {
+            echo 'Tes gagal!'
         }
     }
 }
